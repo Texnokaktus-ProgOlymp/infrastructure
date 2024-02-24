@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+  google-forms-integration-service:
+    build:
+      context: ./GoogleFormsIntegrationService
+      dockerfile: Texnokaktus.ProgOlymp.GoogleFormsIntegrationService/Dockerfile
+      args:
+        GHPAT: ${GHPAT}
+    ports:
+      - "9001:8080"
+    env_file:
+      - ./config/google.env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+  yandex-contest-integration-service:
+    build:
+      context: ./YandexContestIntegrationService
+      dockerfile: Texnokaktus.ProgOlymp.YandexContestIntegrationService/Dockerfile
+      args:
+        GHPAT: ${GHPAT}
+    ports:
+      - "9002:8080"
+    env_file:
+      - ./config/yandex.env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+  kernel:
+    build:
+      context: ./Kernel
+      dockerfile: Texnokaktus.ProgOlymp.Kernel/Dockerfile
+      args:
+        GHPAT: ${GHPAT}
+    ports:
+      - "9003:8080"
+    env_file:
+      - ./config/kernel.env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
